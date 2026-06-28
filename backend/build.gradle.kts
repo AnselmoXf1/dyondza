@@ -11,9 +11,6 @@ application {
     mainClass.set("com.dyondza.backend.ApplicationKt")
 }
 
-repositories {
-    mavenCentral()
-}
 
 val ktorVersion = "2.3.12"
 val exposedVersion = "0.53.0"
