@@ -4,8 +4,8 @@ WORKDIR /app
 COPY . .
 RUN gradle :backend:installDist --no-daemon
 
-# Estágio 2: Runtime leve com OpenJDK 17
-FROM openjdk:17-slim
+# Estágio 2: Runtime leve com Eclipse Temurin JRE 17
+FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 COPY --from=build /app/backend/build/install/backend /app
 
