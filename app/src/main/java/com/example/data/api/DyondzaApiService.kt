@@ -155,7 +155,7 @@ interface DyondzaBackendApi {
 
 object DyondzaApiClient {
     // Endereço do Servidor Ktor em Produção (Cloud Run ou Emulador Local Android 10.0.2.2:8080)
-    var BASE_URL = "http://10.0.2.2:8080/"
+    var BASE_URL = "https://dyondza-backend.onrender.com/"
     var jwtToken: String = ""
 
     private val okHttpClient: OkHttpClient by lazy {
