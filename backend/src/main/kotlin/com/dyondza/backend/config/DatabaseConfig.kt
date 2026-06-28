@@ -15,29 +15,37 @@ import java.util.UUID
 
 object DatabaseConfig {
     fun init() {
-        val dbUrl = System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5432/dyondza"
-        val dbUser = System.getenv("DB_USER") ?: "postgres"
-        val dbPassword = System.getenv("DB_PASSWORD") ?: "postgres"
-        val isPostgres = dbUrl.startsWith("jdbc:postgresql")
+        val dbUrl = System.getenv("DB_URL")
+        val usePostgres = dbUrl != null && dbUrl.startsWith("jdbc:postgresql")
 
-        val config = HikariConfig().apply {
-            if (isPostgres) {
-                driverClassName = "org.postgresql.Driver"
-                jdbcUrl = dbUrl
-                username = dbUser
-                password = dbPassword
-            } else {
-                // Fallback para H2 in-memory caso esteja rodando localmente sem Postgres
+        val dataSource = try {
+            val config = HikariConfig().apply {
+                if (usePostgres) {
+                    driverClassName = "org.postgresql.Driver"
+                    jdbcUrl = dbUrl
+                    username = System.getenv("DB_USER") ?: "postgres"
+                    password = System.getenv("DB_PASSWORD") ?: "postgres"
+                } else {
+                    driverClassName = "org.h2.Driver"
+                    jdbcUrl = "jdbc:h2:mem:dyondza;DB_CLOSE_DELAY=-1"
+                }
+                maximumPoolSize = 10
+                isAutoCommit = false
+                transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+                validate()
+            }
+            HikariDataSource(config)
+        } catch (e: Exception) {
+            println("Aviso: Falha ao conectar ao banco principal (${e.message}). Ativando fallback H2 in-memory.")
+            val fallbackConfig = HikariConfig().apply {
                 driverClassName = "org.h2.Driver"
                 jdbcUrl = "jdbc:h2:mem:dyondza;DB_CLOSE_DELAY=-1"
+                maximumPoolSize = 10
+                isAutoCommit = false
+                validate()
             }
-            maximumPoolSize = 10
-            isAutoCommit = false
-            transactionIsolation = "TRANSACTION_REPEATABLE_READ"
-            validate()
+            HikariDataSource(fallbackConfig)
         }
-
-        val dataSource = HikariDataSource(config)
         Database.connect(dataSource)
 
         transaction {
