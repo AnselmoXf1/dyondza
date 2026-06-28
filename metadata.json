@@ -1,0 +1,6 @@
+{
+  "name": "Dyondza",
+  "description": "Premium study gamification ecosystem with AI coach, study tracker, anti-distraction shield, and school leaderboards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
