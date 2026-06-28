@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.time.OffsetDateTime
+import java.time.LocalDateTime
 import java.util.UUID
 
 object DatabaseConfig {
@@ -49,7 +49,7 @@ object DatabaseConfig {
 
     private fun seedDefaultMissionsIfEmpty() {
         if (Missions.selectAll().count() == 0L) {
-            val now = OffsetDateTime.now()
+            val now = LocalDateTime.now()
             Missions.insert {
                 it[id] = UUID.fromString("2c62c3f8-62d0-4bf6-a579-450f38c642c6")
                 it[title] = "Foco de Ferro"

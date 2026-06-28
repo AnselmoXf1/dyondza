@@ -42,7 +42,7 @@ object SessionService {
             val oldXp = studentRow[Students.xpAccumulated]
             val oldLevel = studentRow[Students.level]
             val newXp = oldXp + xpEarned
-            val expectedLevel = Math.min(50, Math.floor(1.0 + newXp / 100.0)).toInt()
+            val expectedLevel = (1 + newXp / 100).coerceAtMost(50)
             val levelUpgraded = expectedLevel > oldLevel
 
             if (xpEarned > 0) {
