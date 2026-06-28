@@ -24,5 +24,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "My Application"
 
-include(":app")
+if (System.getenv("SKIP_ANDROID_APP") != "true") {
+    include(":app")
+}
 include(":backend")

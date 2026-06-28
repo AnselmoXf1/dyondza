@@ -2,6 +2,7 @@
 FROM gradle:8.10-jdk17 AS build
 WORKDIR /app
 COPY . .
+ENV SKIP_ANDROID_APP=true
 RUN gradle :backend:installDist --no-daemon
 
 # Estágio 2: Runtime leve com Eclipse Temurin JRE 17
